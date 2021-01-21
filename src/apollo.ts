@@ -7,9 +7,10 @@ import {
 import { LOCAL_STORAGE_TOKEN } from './constants'
 import { setContext } from '@apollo/client/link/context'
 
-const token = localStorage.getItem(LOCAL_STORAGE_TOKEN)
-export const isLoggedInVar = makeVar(Boolean(token))
-export const jwtTokenVar = makeVar(token)
+export const isLoggedInVar = makeVar(
+  Boolean(localStorage.getItem(LOCAL_STORAGE_TOKEN))
+)
+export const jwtTokenVar = makeVar(localStorage.getItem(LOCAL_STORAGE_TOKEN))
 
 const httpLink = createHttpLink({
   uri: 'http://localhost:4000/graphql'
@@ -19,7 +20,7 @@ const authLink = setContext((_, { headers }) => {
   return {
     headers: {
       ...headers,
-      'x-jwt': token || ''
+      'x-jwt': jwtTokenVar() || ''
     }
   }
 })

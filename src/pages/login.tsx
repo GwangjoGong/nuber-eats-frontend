@@ -41,9 +41,9 @@ const Login = () => {
       login: { ok, token }
     } = data
     if (ok && token) {
-      localStorage.setItem(LOCAL_STORAGE_TOKEN, token)
       jwtTokenVar(token)
       isLoggedInVar(true)
+      localStorage.setItem(LOCAL_STORAGE_TOKEN, token)
     }
   }
 
