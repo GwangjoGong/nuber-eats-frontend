@@ -1,16 +1,17 @@
-import { gql, useApolloClient, useMutation } from '@apollo/client'
-import { useForm } from 'react-hook-form'
-import { Button } from '../../components/button'
-import { FormError } from '../../components/form-error'
-import { useMe } from '../../hooks/useMe'
+import { gql, useApolloClient, useMutation } from '@apollo/client';
+import { Helmet } from 'react-helmet-async';
+import { useForm } from 'react-hook-form';
+import { Button } from '../../components/button';
+import { FormError } from '../../components/form-error';
+import { useMe } from '../../hooks/useMe';
 import {
   editProfile,
   editProfileVariables
-} from '../../__generated__/editProfile'
+} from '../../__generated__/editProfile';
 
 interface IForm {
-  email?: string
-  password?: string
+  email?: string;
+  password?: string;
 }
 
 const EDIT_PROFILE_MUTATION = gql`
@@ -20,20 +21,20 @@ const EDIT_PROFILE_MUTATION = gql`
       error
     }
   }
-`
+`;
 
 export const EditProfile = () => {
-  const { data: userData } = useMe()
-  const client = useApolloClient()
+  const { data: userData } = useMe();
+  const client = useApolloClient();
   const onCompleted = (data: editProfile) => {
     const {
       editProfile: { ok }
-    } = data
+    } = data;
     if (ok) {
-      const { email: newEmail } = getValues()
+      const { email: newEmail } = getValues();
       const {
         me: { email: prevEmail, id }
-      } = userData!
+      } = userData!;
       if (newEmail !== prevEmail) {
         client.writeFragment({
           id: `User:${id}`,
@@ -47,14 +48,14 @@ export const EditProfile = () => {
             email: newEmail,
             verified: false
           }
-        })
+        });
       }
     }
-  }
+  };
   const [editProfile, { data: editProfileResult, loading }] = useMutation<
     editProfile,
     editProfileVariables
-  >(EDIT_PROFILE_MUTATION, { onCompleted })
+  >(EDIT_PROFILE_MUTATION, { onCompleted });
   const {
     register,
     handleSubmit,
@@ -66,11 +67,11 @@ export const EditProfile = () => {
     defaultValues: {
       email: userData?.me.email
     }
-  })
+  });
 
   const onSubmit = () => {
     if (!loading) {
-      const { email, password } = getValues()
+      const { email, password } = getValues();
       editProfile({
         variables: {
           input: {
@@ -78,12 +79,15 @@ export const EditProfile = () => {
             ...(password !== '' && { password })
           }
         }
-      })
+      });
     }
-  }
+  };
 
   return (
     <div className='mt-52 flex flex-col justify-center items-center'>
+      <Helmet>
+        <title>Edit Profile | Nuber Eats</title>
+      </Helmet>
       <h4 className='font-semibold mb-3 text-2xl'>Edit Profile</h4>
       <form
         className='grid gap-5 mt-3 w-full max-w-screen-sm'
@@ -121,5 +125,5 @@ export const EditProfile = () => {
         )}
       </form>
     </div>
-  )
-}
+  );
+};

@@ -12,8 +12,16 @@
   @apply bg-gray-200;
 }
 
+.pagination {
+  @apply focus:outline-none font-medium text-2xl;
+}
+
+.pagination:disabled {
+  @apply opacity-30;
+}
+
 .container {
-  @apply w-full max-w-screen-xl mx-auto;
+  @apply w-full max-w-screen-xl px-5 xl:mx-auto xl:px-0;
 }
 
 @tailwind utilities;
